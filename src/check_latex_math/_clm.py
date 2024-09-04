@@ -70,7 +70,7 @@ KNOWN_MATH_MACROS = {
     'hfill', 'vfill', 'phantom', 'mathstrut', 'noalign', 'vphantom', 'hphantom', 'smash',
 
     # Text styles
-    'textstyle', 'displaystyle', 'scriptstyle', 'scriptscriptstyle',
+    'textstyle', 'displaystyle', 'scriptstyle', 'scriptscriptstyle', 'textbf', 'textit', 'texttt', 'textsf',
 
     # Dots
     'dots', 'cdots', 'vdots', 'ddots', 'iddots', 'dotsc', 'dotsb', 'dotso', 'ldots', 'adots',
@@ -89,6 +89,10 @@ KNOWN_MATH_MACROS = {
 
     # Miscellaneous
     'overline', 'underline', 'boxed', 'text', 'mod', 'bmod', 'pmod', 'mathstrut', 'quad', 'qquad',
+    'operatorname', ' ', ',', '.', '!', '?', ':', ';', '(', ')', '[', ']', '{', '}', '|', '||', '\\',
+    'prime', 'degree', 'celsius', 'micro', 'angstrom', 'perthousand', 'ohm', 'degree', 'textdegree',
+    'lvert', 'rvert', 'lVert', 'rVert', 'langle', 'rangle', 'lfloor', 'rfloor', 'lceil', 'rceil', 'ulcorner',
+    'tag', 
 
 }
 
@@ -118,17 +122,17 @@ def extract_latex_math(content: str) -> list[str]:
         latex_math.extend(re.findall(pattern, content, re.DOTALL))
     return latex_math
 
+
 def validate_latex(latex_expr: str) -> bool:
     """
     Validate LaTeX expressions using pylatexenc.
     """
     from pylatexenc.latexwalker import LatexMacroNode
-    import pdb
     
 
     def recurse(node):
         if isinstance(node, LatexMacroNode):
-            if node.macroname in ['[', ']', '{', '}', '(', ')', '|', '||']:
+            if node.macroname in ['[', ']', '{', '}', '(', ')', '|', '||', "\\"]:
                 return
             if node.macroname not in KNOWN_MATH_MACROS:
                 # pdb.set_trace()
@@ -178,6 +182,10 @@ def main():
                 try:
                     validate_latex(expr)
                 except UnknownLatexMacroError as e:
+                    raise InvalidLatexExpressionError(
+                        f"Invalid LaTeX expression in {file_path}: \n\n{expr}"
+                    ) from e
+                except LatexWalkerParseError as e:
                     raise InvalidLatexExpressionError(
                         f"Invalid LaTeX expression in {file_path}: \n\n{expr}"
                     ) from e

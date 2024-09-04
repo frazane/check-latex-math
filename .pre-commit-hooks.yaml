@@ -1,5 +1,5 @@
 - id: latex-math-validation
-  name: latex-math-validation
+  name: validate LaTeX math
   entry: check-latex-math
   language: python
   additional_dependencies: ["pylatexenc"]
