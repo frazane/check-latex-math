@@ -1,0 +1,6 @@
+- id: latex-math-validation
+  name: latex-math-validation
+  entry: check-latex-math
+  language: python
+  additional_dependencies: ["pylatexenc"]
+  pass_filenames: false

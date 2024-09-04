@@ -1,0 +1,12 @@
+[project]
+name = "check-latex-math"
+version = "0.1.0"
+description = "Check LaTeX math expressions for correctness."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pylatexenc>=2.10",
+]
+
+[project.scripts]
+check-latex-math = "check_latex_math:main"
